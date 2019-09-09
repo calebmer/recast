@@ -1,7 +1,7 @@
 {
   "author": "Ben Newman <bn@cs.stanford.edu>",
-  "name": "recast",
-  "version": "0.18.2",
+  "name": "@calebmer-airtable/recast",
+  "version": "0.18.2-patch.1",
   "description": "JavaScript syntax tree transformer, nondestructive pretty-printer, and automatic source map generator",
   "keywords": [
     "ast",
@@ -16,7 +16,7 @@
   "homepage": "http://github.com/benjamn/recast",
   "repository": {
     "type": "git",
-    "url": "git://github.com/benjamn/recast.git"
+    "url": "git://github.com/calebmer/recast.git"
   },
   "license": "MIT",
   "main": "main.js",
