@@ -2060,18 +2060,23 @@ function genericPrintNoParens(path: any, options: any, print: any) {
         ]);
 
     case "TSTypeLiteral": {
+        const oneLine = n.loc ? n.loc.start.line === n.loc.end.line : n.members.length < 2;
         const memberLines =
-            fromString(",\n").join(path.map(print, "members"));
+            fromString(oneLine ? ", " : ",\n").join(path.map(print, "members"));
 
         if (memberLines.isEmpty()) {
             return fromString("{}", options);
         }
 
-        parts.push(
-            "{\n",
-            memberLines.indent(options.tabWidth),
-            "\n}"
-        );
+        if (oneLine) {
+            parts.push("{", memberLines, "}");
+        } else {
+            parts.push(
+                "{\n",
+                memberLines.indent(options.tabWidth),
+                "\n}"
+            );
+        }
 
         return concat(parts);
     }
