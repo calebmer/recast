@@ -690,7 +690,7 @@ function genericPrintNoParens(path: any, options: any, print: any) {
             len += n[field].length;
         });
 
-        var oneLine = (isTypeAnnotation && len === 1) || len === 0;
+        var oneLine = n.loc ? n.loc.start.line === n.loc.end.line : (isTypeAnnotation && len === 1) || len === 0;
         var leftBrace = n.exact ? "{|" : "{";
         var rightBrace = n.exact ? "|}" : "}";
         parts.push(oneLine ? leftBrace : leftBrace + "\n");
