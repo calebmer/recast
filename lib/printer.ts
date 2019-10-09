@@ -2599,7 +2599,7 @@ function printStatementSequence(path: any, options: any, print: any) {
                 var leadingGap = trueLoc.start.line - beforeStartLine;
                 leadingSpace = Array(leadingGap + 1).join("\n");
             } else {
-                leadingSpace = multiLine ? "\n\n" : "\n";
+                leadingSpace = multiLine && !stmt.recastDisableMultilineSpacing ? "\n\n" : "\n";
             }
         } else {
             leadingSpace = "";
@@ -2612,7 +2612,7 @@ function printStatementSequence(path: any, options: any, print: any) {
                 var trailingGap = afterEndLine - trueLoc.end.line;
                 trailingSpace = Array(trailingGap + 1).join("\n");
             } else {
-                trailingSpace = multiLine ? "\n\n" : "\n";
+                trailingSpace = multiLine && !stmt.recastDisableMultilineSpacing ? "\n\n" : "\n";
             }
         } else {
             trailingSpace = "";
