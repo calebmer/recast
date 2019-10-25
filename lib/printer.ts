@@ -2074,6 +2074,7 @@ function genericPrintNoParens(path: any, options: any, print: any) {
             parts.push(
                 "{\n",
                 memberLines.indent(options.tabWidth),
+                util.isTrailingCommaEnabled(options, "objects") ? "," : "",
                 "\n}"
             );
         }
