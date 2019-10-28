@@ -3005,11 +3005,10 @@ function insertTrailingComma(lines: Lines): Lines {
         if (lines.charAt(pos) === "/") {
             if (!lines.prevPos(pos)) break;
             if (lines.charAt(pos) === "/") {
-                if (!lines.prevPos(pos)) break;
-                if (lines.charAt(pos) === " ") {
-                    finalPos = pos;
-                    break;
-                }
+                if (!lines.prevPos(pos, true)) break;
+                if (lines.charAt(pos) !== " ") lines.nextPos(pos);
+                finalPos = pos;
+                break;
             }
         }
         if (!lines.prevPos(pos, true)) break;

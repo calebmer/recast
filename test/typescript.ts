@@ -52,7 +52,17 @@ var nodeMajorVersion = parseInt(process.versions.node, 10);
       'type T = {',
       '  a: string, // test',
       '  b: number, // test',
-      '};'
+      '};',
+      '',
+      'type U = {',
+      '  a: string,  // test',
+      '  b: number,  // test',
+      '};',
+      '',
+      'type V = {',
+      '  a: string,// test',
+      '  b: number,// test',
+      '};',
     ], {
       trailingComma: true,
     });
