@@ -2061,8 +2061,18 @@ function genericPrintNoParens(path: any, options: any, print: any) {
 
     case "TSTypeLiteral": {
         const oneLine = n.loc ? n.loc.start.line === n.loc.end.line : n.members.length < 2;
-        const memberLines =
-            fromString(oneLine ? ", " : ",\n").join(path.map(print, "members"));
+
+        let memberLines = fromString("");
+
+        let first = true;
+        path.each((memberPath: any) => {
+            if (first) {
+                first = false;
+                memberLines = print(memberPath);
+            } else {
+                memberLines = insertTrailingComma(memberLines).concat(oneLine ? " " : "\n", print(memberPath));
+            }
+        }, "members");
 
         if (memberLines.isEmpty()) {
             return fromString("{}", options);
@@ -2071,12 +2081,11 @@ function genericPrintNoParens(path: any, options: any, print: any) {
         if (oneLine) {
             parts.push("{", memberLines, "}");
         } else {
-            parts.push(
-                "{\n",
-                memberLines.indent(options.tabWidth),
-                util.isTrailingCommaEnabled(options, "objects") ? "," : "",
-                "\n}"
-            );
+            let lines = memberLines.indent(options.tabWidth);
+            if (util.isTrailingCommaEnabled(options, "objects")) {
+                lines = insertTrailingComma(lines);
+            }
+            parts.push("{\n", lines, "\n}");
         }
 
         return concat(parts);
@@ -2986,4 +2995,28 @@ function maybeAddSemicolon(lines: any) {
     if (!eoc || "\n};".indexOf(eoc) < 0)
         return concat([lines, ";"]);
     return lines;
+}
+
+function insertTrailingComma(lines: Lines): Lines {
+    let pos = lines.lastPos();
+    let lastLine = pos.line;
+    let finalPos = lines.lastPos();
+    while (pos.line === lastLine) {
+        if (lines.charAt(pos) === "/") {
+            if (!lines.prevPos(pos)) break;
+            if (lines.charAt(pos) === "/") {
+                if (!lines.prevPos(pos)) break;
+                if (lines.charAt(pos) === " ") {
+                    finalPos = pos;
+                    break;
+                }
+            }
+        }
+        if (!lines.prevPos(pos, true)) break;
+    }
+    return concat([
+        lines.slice(lines.firstPos(), finalPos),
+        ",",
+        lines.slice(finalPos, lines.lastPos()),
+    ]);
 }

@@ -11,10 +11,10 @@ var nodeMajorVersion = parseInt(process.versions.node, 10);
 (nodeMajorVersion >= 6 ? describe : xdescribe)
 ("TypeScript", function() {
   it('basic printing', function() {
-    function check(lines: any) {
+    function check(lines: any, options?: any) {
       const code = lines.join(eol);
       const ast = recast.parse(code, { parser });
-      const output = recast.prettyPrint(ast, { tabWidth: 2 }).code;
+      const output = recast.prettyPrint(ast, { tabWidth: 2, ...options }).code;
       assert.strictEqual(code, output);
     }
 
@@ -47,6 +47,15 @@ var nodeMajorVersion = parseInt(process.versions.node, 10);
       '  b?: number',
       '};'
     ]);
+
+    check([
+      'type T = {',
+      '  a: string, // test',
+      '  b: number, // test',
+      '};'
+    ], {
+      trailingComma: true,
+    });
 
     check([
       'type c = T & U & V;'
